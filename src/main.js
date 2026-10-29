@@ -95,7 +95,7 @@ class DevPulseApp {
               </div>
 
               <!-- Github link -->
-              <a href="https://github.com" target="_blank" rel="noreferrer" class="btn btn-ghost btn-sm btn-circle" title="Mã nguồn">
+              <a href="https://github.com/nothingistoo-late/DevTool" target="_blank" rel="noreferrer" class="btn btn-ghost btn-sm btn-circle" title="Mã nguồn">
                 ${Icons.code}
               </a>
             </div>

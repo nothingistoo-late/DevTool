@@ -1,11 +1,21 @@
 import { JsonFormatterTool } from '../tools/json-formatter.js';
 import { TextDiffTool } from '../tools/text-diff.js';
+import { MockDataGeneratorTool } from '../tools/mock-data-generator.js';
+import { RestClientTool } from '../tools/rest-client.js';
+import { RegexTesterTool } from '../tools/regex-tester.js';
+import { JwtDebuggerTool } from '../tools/jwt-debugger.js';
+import { GuidGeneratorTool } from '../tools/guid-generator.js';
 import { Base64Tool } from '../tools/base64-tool.js';
 
 export const ToolRegistry = {
   tools: [
     JsonFormatterTool,
     TextDiffTool,
+    MockDataGeneratorTool,
+    RestClientTool,
+    RegexTesterTool,
+    JwtDebuggerTool,
+    GuidGeneratorTool,
     Base64Tool
   ],
 

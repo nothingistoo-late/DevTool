@@ -1,5 +1,7 @@
 # ⚡ DevPulse - Bộ Công Cụ Lập Trình Viên Đa Năng (Developer Multi-Tools Suite)
 
+> 🌐 **Truy cập trực tiếp online tại:** [https://devtool-indol.vercel.app](https://devtool-indol.vercel.app)
+
 **DevPulse** là một ứng dụng web hiện đại, tốc độ cao dành cho lập trình viên. Dự án được thiết kế theo kiến trúc **Module cắm rút (Plugin Architecture)**, giúp bạn cực kỳ dễ dàng mở rộng và bổ sung hàng loạt công cụ dev trong tương lai.
 
 ---
@@ -45,7 +47,85 @@
 
 ---
 
-### 3. 🛡️ Base64 & URL Codec (Công cụ bổ sung mẫu) (`#base64-codec`)
+### 3. 🎭 Mock Data / Fake Data Generator (`#mock-data-generator`)
+- **Sinh dữ liệu thử nghiệm siêu thực tế**:
+  - Tên tiếng Việt có dấu đầy đủ (*Nguyễn Văn An, Trần Thị Mai...*) hoặc tên tiếng Anh (*James Smith...*).
+  - Email theo tên (*an.nguyen@gmail.com*), SĐT Việt Nam (09x, 03x), Tỉnh/Thành phố VN, Địa chỉ nhà.
+  - Chức vụ, công ty (*FPT, VNG, Viettel...*), đơn hàng, giá tiền VNĐ/USD, UUID, Avatar URL.
+- **Trình tạo Schema tùy biến**:
+  - Tự do thêm, bớt, đổi tên các cột theo ý muốn.
+  - Có sẵn các Schema mẫu: *Danh sách Người dùng (Users)*, *Đơn hàng E-Commerce (Orders)*, *Bài viết Blog (Posts)*.
+- **Xuất đa định dạng CSDL (Multi-Database Export)**:
+  - 🐬 **MySQL**: `INSERT INTO \`table\` (\`col\`) VALUES (...);` (chuẩn cú pháp backticks, boolean 1/0).
+  - 🐘 **PostgreSQL**: `INSERT INTO "table" ("col") VALUES (...);` (chuẩn double quotes, boolean `true`/`false`).
+  - 🏢 **Microsoft SQL Server (T-SQL)**: `INSERT INTO [table] ([col]) VALUES (...);` (dấu ngoặc vuông `[...]`, prefix `N'...'` bảo toàn Unicode tiếng Việt, boolean `1`/`0`).
+  - 🪶 **SQLite**: `INSERT INTO "table" VALUES (...);`.
+  - 🍃 **MongoDB insertMany()**: `db.collection.insertMany([...]);` (dán thẳng vào Mongo Compass / mongosh).
+  - 🍃 **MongoDB JSONL**: Định dạng JSON Lines chuẩn cho lệnh `mongoimport`.
+  - **JSON Array**: `[{...}]`.
+  - **CSV**: Tương thích hoàn toàn với Excel / Google Sheets.
+  - Cho phép tùy biến tên bảng SQL hoặc tên Collection MongoDB!
+
+---
+
+### 4. 🌐 Mini REST API & Webhook Client (`#rest-client`)
+- **Postman thu nhỏ ngay trong trình duyệt**:
+  - Hỗ trợ đầy đủ các phương thức HTTP: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`.
+  - Tích hợp sẵn các API công cộng mẫu để test nhanh (*JSONPlaceholder, httpbin, GitHub Zen*).
+- **Bộ cấu hình Request linh hoạt**:
+  - Bảng tham số **Params** tự động đồng bộ 2 chiều với query string của URL.
+  - Bảng tùy chỉnh **Headers** (`Content-Type`, `Authorization: Bearer`...).
+  - Trình soạn thảo **JSON Body** có tính năng Beautify format tự động.
+- **Xem phản hồi chi tiết (Response Inspector)**:
+  - Trực quan hóa mã trạng thái HTTP: `200 OK`, `201 Created`, `400 Bad Request`, `404 Not Found`.
+  - Đo thời gian phản hồi chính xác tính theo mili-giây (**Latency ms**) và dung lượng payload.
+  - Xem Response Body có định dạng JSON và xem toàn bộ Response Headers trả về.
+
+---
+
+### 5. 🔍 Regex Tester & Cheatsheet (`#regex-tester`)
+- **Kiểm thử Regex thời gian thực**:
+  - Hỗ trợ đầy đủ cờ flags: `g` (global), `i` (case-insensitive), `m` (multiline), `s` (dotAll).
+  - Tự động bắt lỗi cú pháp regex kèm thông báo rõ ràng.
+- **Phân tích chi tiết Matches & Capture Groups**:
+  - Liệt kê toàn bộ các match tìm thấy kèm vị trí chỉ mục (index range).
+  - Phân tách từng Capture Group `$1`, `$2`... trực quan.
+- **Tính năng thay thế chuỗi (Replace)**:
+  - Xem trước kết quả thay thế theo thời gian thực (hỗ trợ `$1`, `$2`).
+- **Thư viện Regex mẫu (1-click load)**:
+  - Email, URL, SĐT Việt Nam, IPv4, UUID, Ngày tháng (YYYY-MM-DD), Mã màu Hex...
+- **Bảng tra cứu Cheatsheet**:
+  - Tổng hợp nhanh các ký tự đặc biệt, lượng từ (quantifiers), nhóm và lookaround.
+
+---
+
+### 4. 🛡️ JWT Token Debugger & Verifier (`#jwt-debugger`)
+- **Giải mã 3 phần có màu sắc trực quan**:
+  - Header (đỏ hồng), Payload (tím), Signature (xanh dương).
+- **Phân tích hạn sử dụng thông minh**:
+  - Tự động tính toán thời gian hết hạn (`exp`) và hiển thị đếm ngược: *"Còn hạn trong X phút"* hoặc *"Đã hết hạn Y giờ trước"*.
+  - Hiển thị ngày giờ phát hành (`iat`), đối tượng (`sub`), nhà phát hành (`iss`).
+- **Xác minh chữ ký Client-side (HMAC-SHA256)**:
+  - Nhập Secret Key để xác minh xem token có bị làm giả hay không thông qua Web Crypto API.
+  - Bảo mật tuyệt đối: Token không bao giờ bị gửi lên server.
+
+---
+
+### 5. 🔑 GUID / UUID Generator & Inspector (`#guid-generator`)
+- **Tạo hàng loạt GUID/UUID đa phiên bản**:
+  - `UUID v4`: Ngẫu nhiên mã hóa an toàn (`crypto.randomUUID()`).
+  - `UUID v7`: Sắp xếp theo mốc thời gian (RFC 9562), cực kỳ tối ưu cho Primary Key cơ sở dữ liệu.
+  - `UUID v1`: Timestamp + Node ID.
+  - `Nil UUID`: `00000000-0000-0000-0000-000000000000`.
+- **Tùy chọn định dạng phong phú**:
+  - Chữ hoa / chữ thường, có/không gạch ngang, ngoặc nhọn `{...}`, ngoặc tròn `(...)`, nháy kép/đơn.
+  - Xuất code: Danh sách, Mảng JSON, C# `Guid.Parse("...")`, SQL `IN ('...', '...')`.
+- **Inspector & Validator**:
+  - Kiểm tra tính hợp lệ và trích xuất ngược lại ngày giờ khởi tạo chính xác từ UUID v7 và v1.
+
+---
+
+### 6. 🔤 Base64 & URL Codec (`#base64-codec`)
 - Mã hóa & giải mã Base64 (hỗ trợ Unicode tiếng Việt đầy đủ).
 - URL Encode / Decode (`encodeURIComponent`).
 - Hexadecimal conversion.
@@ -134,13 +214,13 @@ export const ToolRegistry = {
 
 ## 💻 Cách Khởi Chạy Dự Án
 
-### 1. Cài đặt thư viện:
+### 🌐 1. Truy cập trực tiếp (Không cần cài đặt):
+Bạn có thể sử dụng ngay bộ công cụ online hoàn toàn miễn phí tại:
+👉 **[https://devtool-indol.vercel.app](https://devtool-indol.vercel.app)**
+
+### 2. Cài đặt & Chạy trên máy cá nhân (Local):
 ```bash
 npm install
-```
-
-### 2. Chạy môi trường phát triển (Development):
-```bash
 npm run dev
 ```
 Truy cập trình duyệt: `http://localhost:5173/`
