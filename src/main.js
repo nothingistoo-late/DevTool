@@ -167,8 +167,8 @@ class DevPulseApp {
       </div>
 
       <!-- Command Palette Modal (DaisyUI Modal) -->
-      <dialog id="palette-modal" class="modal modal-top pt-16 sm:pt-24 backdrop-blur-sm">
-        <div class="modal-box max-w-xl p-0 bg-base-100 border border-base-content/15 shadow-2xl">
+      <dialog id="palette-modal" class="modal items-start pt-16 sm:pt-24 backdrop-blur-sm">
+        <div class="modal-box w-11/12 max-w-xl p-0 bg-base-100 border border-base-content/15 shadow-2xl rounded-2xl mx-auto">
           <div class="p-3 border-b border-base-content/10 flex items-center gap-2">
             <span class="text-base-content/50 pl-2">${Icons.search}</span>
             <input id="palette-input" type="text" placeholder="Tìm kiếm công cụ (vd: json, diff, compare, base64...)" class="input input-ghost w-full focus:outline-none focus:bg-transparent text-sm placeholder:text-base-content/40" autocomplete="off" />
@@ -325,9 +325,12 @@ class DevPulseApp {
     const modal = document.getElementById('palette-modal');
     const paletteInput = document.getElementById('palette-input');
 
+    this.paletteSelectedIndex = 0;
+
     const openPalette = () => {
       modal.showModal();
       paletteInput.value = '';
+      this.paletteSelectedIndex = 0;
       this.renderPaletteResults('');
       setTimeout(() => paletteInput.focus(), 50);
     };
@@ -339,7 +342,31 @@ class DevPulseApp {
 
     if (paletteInput) {
       paletteInput.addEventListener('input', (e) => {
+        this.paletteSelectedIndex = 0;
         this.renderPaletteResults(e.target.value);
+      });
+
+      paletteInput.addEventListener('keydown', (e) => {
+        const items = document.querySelectorAll('#palette-results .palette-item');
+        if (!items.length) return;
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          this.paletteSelectedIndex = (this.paletteSelectedIndex + 1) % items.length;
+          this.updatePaletteHighlight();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          this.paletteSelectedIndex = (this.paletteSelectedIndex - 1 + items.length) % items.length;
+          this.updatePaletteHighlight();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          const selected = items[this.paletteSelectedIndex];
+          if (selected) {
+            const toolId = selected.dataset.toolId;
+            this.switchTool(toolId);
+            modal.close();
+          }
+        }
       });
     }
 
@@ -356,6 +383,18 @@ class DevPulseApp {
     });
   }
 
+  updatePaletteHighlight() {
+    const items = document.querySelectorAll('#palette-results .palette-item');
+    items.forEach((item, idx) => {
+      if (idx === this.paletteSelectedIndex) {
+        item.classList.add('bg-base-200');
+        item.scrollIntoView({ block: 'nearest' });
+      } else {
+        item.classList.remove('bg-base-200');
+      }
+    });
+  }
+
   renderPaletteResults(query) {
     const listEl = document.getElementById('palette-results');
     const tools = ToolRegistry.search(query);
@@ -365,8 +404,12 @@ class DevPulseApp {
       return;
     }
 
+    if (this.paletteSelectedIndex >= tools.length) {
+      this.paletteSelectedIndex = 0;
+    }
+
     listEl.innerHTML = tools.map((tool, idx) => `
-      <div class="palette-item p-2.5 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-base-200 transition-colors ${idx === 0 ? 'bg-base-200' : ''}" data-tool-id="${tool.id}">
+      <div class="palette-item p-2.5 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-base-200 transition-colors ${idx === this.paletteSelectedIndex ? 'bg-base-200' : ''}" data-tool-id="${tool.id}" data-index="${idx}">
         <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">${tool.icon}</span>
         <div class="flex-1 min-w-0">
           <div class="font-medium text-xs text-base-content truncate">${escapeHtml(tool.title)}</div>
@@ -377,7 +420,11 @@ class DevPulseApp {
     `).join('');
 
     const modal = document.getElementById('palette-modal');
-    listEl.querySelectorAll('.palette-item').forEach(item => {
+    listEl.querySelectorAll('.palette-item').forEach((item, idx) => {
+      item.addEventListener('mouseenter', () => {
+        this.paletteSelectedIndex = idx;
+        this.updatePaletteHighlight();
+      });
       item.addEventListener('click', () => {
         const toolId = item.dataset.toolId;
         this.switchTool(toolId);
